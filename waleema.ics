@@ -1,0 +1,33 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Saad and Sana//Walima invite//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:walima-saad-sana-20261109@invite
+DTSTAMP:20261016T000000Z
+DTSTART:20261109T130000Z
+DTEND:20261109T170000Z
+SUMMARY:Dawat-e-Walima of Saad & Sana
+LOCATION:Abuji Marriage Ground\, Aampada Road\, Avachit Pada\, Bhiwandi 421
+ 302
+DESCRIPTION:With the blessings of Allah\, you are invited to the Dawat-e-Wa
+ lima of Md. Saad and Sana\, after Namaz-e-Maghrib.\n\nDirections: https://
+ www.google.com/maps/dir/?api=1&destination=Avachit%20Pada%2C%20Bhiwandi%2C
+ %20Maharashtra%20421302
+URL:https://www.google.com/maps/dir/?api=1&destination=Avachit%20Pada%2C%20
+ Bhiwandi%2C%20Maharashtra%20421302
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Tomorrow after Maghrib: Dawat-e-Walima of Saad & Sana\, Abuji M
+ arriage Ground\, Bhiwandi
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Today after Maghrib: Dawat-e-Walima of Saad & Sana\, Abuji Marr
+ iage Ground\, Bhiwandi
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

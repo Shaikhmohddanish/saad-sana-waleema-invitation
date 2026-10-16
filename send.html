@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Walima Invite Sender</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Great+Vibes&display=swap">
+<style>
+/* Layout: a single working column. Velvet header like the invite, then three numbered steps on plain paper. */
+:root{
+  --velvet:#5A0710; --velvet-deep:#2A0307; --paper:#FBF6EE; --card:#FFFFFF; --ink:#2F1714; --soft:#6B4A40;
+  --wine:#7E1426; --gold:#B48A45; --gold-hi:#E8CB86; --line:rgba(126,20,38,.18); --ok:#2F6B3A; --ok-bg:#E6F1E6;
+  --btn:#7E1426; --btn-ink:#FFF6E6; --field:#FFFDF9;
+  --f-ui:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Arial,sans-serif;
+  --f-caps:"Cinzel",Georgia,serif; --f-script:"Great Vibes","Segoe Script",cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --paper:#1B0508; --card:#24090D; --ink:#F2E4CD; --soft:#CDB396; --wine:#EBCB8A; --line:rgba(233,203,138,.2); --ok:#9BD3A3; --ok-bg:#16301B; --btn:#D9B46C; --btn-ink:#2A0A0E; --field:#21070A; color-scheme:dark; } }
+:root[data-theme="dark"]{ --paper:#1B0508; --card:#24090D; --ink:#F2E4CD; --soft:#CDB396; --wine:#EBCB8A; --line:rgba(233,203,138,.2); --ok:#9BD3A3; --ok-bg:#16301B; --btn:#D9B46C; --btn-ink:#2A0A0E; --field:#21070A; color-scheme:dark; }
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-ui);font-size:16px;line-height:1.5}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.top{background:radial-gradient(120% 90% at 50% 0%,#7C101F 0%,var(--velvet) 50%,var(--velvet-deep) 100%);color:#F6E8D0;text-align:center;padding:26px 16px 22px}
+.top h1{margin:0;font-family:var(--f-caps);font-weight:600;font-size:1.05rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)}
+.top p{margin:2px 0 0;font-family:var(--f-script);font-size:2rem;line-height:1.2}
+main{max-width:680px;margin:0 auto;padding:20px 16px 60px;display:flex;flex-direction:column;gap:18px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px}
+.step h2{margin:0 0 4px;font-size:1.05rem;display:flex;gap:10px;align-items:center}
+.step h2 .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--wine);color:var(--card);font-size:.85rem;font-weight:700;flex:none}
+.hint{margin:0 0 10px;color:var(--soft);font-size:.92rem}
+input[type=url],input[type=text],textarea{width:100%;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
+textarea{resize:vertical}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:999px;border:1px solid var(--btn);background:var(--btn);color:var(--btn-ink);font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn.line{background:transparent;color:var(--wine);border-color:var(--wine)}
+.btn.small{min-height:38px;padding:6px 12px;font-size:.9rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
+.seg label{position:relative}
+.seg input{position:absolute;opacity:0;inset:0;margin:0}
+.seg span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:46px;padding:6px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;font-weight:600;line-height:1.2;cursor:pointer}
+.seg input:checked+span{background:var(--wine);color:var(--card);border-color:var(--wine)}
+.seg input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px}
+details{margin-top:12px}
+summary{cursor:pointer;color:var(--wine);font-weight:600}
+.progress{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:4px 0 10px;font-weight:600}
+.bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;width:0;background:var(--wine);transition:width .3s}
+.list{display:flex;flex-direction:column;gap:10px}
+.guest{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--field)}
+.guest.done{background:var(--ok-bg);border-color:transparent}
+.guest input[type=checkbox]{width:22px;height:22px;margin:2px 0 0;accent-color:var(--wine)}
+.g-name{font-weight:700;overflow-wrap:anywhere}
+.g-meta{grid-column:2;color:var(--soft);font-size:.86rem;overflow-wrap:anywhere}
+.g-actions{grid-column:1/-1;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px;margin-top:8px}
+.g-actions .btn{min-width:0;padding-inline:8px}
+.empty{color:var(--soft);font-style:italic;text-align:center;padding:12px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(20,2,4,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px}
+.modal img{max-height:72vh;max-width:100%;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.modal p{margin:0;color:#F6E8D0;text-align:center;font-size:.92rem}
+.note{font-size:.88rem;color:var(--soft);margin:10px 0 0}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Send your invites</h1>
+  <p>Saad &amp; Sana</p>
+</header>
+<main>
+  <section class="step" aria-labelledby="s1">
+    <h2 id="s1"><span class="n">1</span>Your invite website</h2>
+    <p class="hint">The link of your hosted invite. Each guest gets this link with their own name added.</p>
+    <input type="url" id="base" inputmode="url" autocomplete="off" spellcheck="false" value="https://saad-sana-waleema-invitation.vercel.app/">
+  </section>
+
+  <section class="step" aria-labelledby="s2">
+    <h2 id="s2"><span class="n">2</span>Your guests</h2>
+    <p class="hint">One guest per line: name, then phone number. You can paste two columns from Excel or Google Sheets.</p>
+    <textarea id="list" rows="7" spellcheck="false" placeholder="Rahman Bhai &amp; Family, 98765 43210&#10;Ayesha Aunty, +91 91234 56789&#10;Imran Khan 9988776655"></textarea>
+    <div class="row"><button class="btn" type="button" id="make">Make links</button><span class="hint" id="parsed" style="margin:0"></span></div>
+    <p class="note">Your list stays on this device. Nothing is uploaded anywhere.</p>
+  </section>
+
+  <section class="step" aria-labelledby="s3">
+    <h2 id="s3"><span class="n">3</span>Send on WhatsApp</h2>
+    <p class="hint">Pick the message, then tap Send for each guest. WhatsApp opens with the message ready. The box gets ticked when you tap Send. Copy gives you the text, and Card makes the card picture with their name on it.</p>
+    <div class="seg" role="radiogroup" aria-label="Message">
+      <label><input type="radio" name="kind" value="invite" checked><span>Invitation</span></label>
+      <label><input type="radio" name="kind" value="r1"><span>Reminder<br>8 Nov</span></label>
+      <label><input type="radio" name="kind" value="r2"><span>Reminder<br>9 Nov</span></label>
+    </div>
+    <details>
+      <summary>Edit this message</summary>
+      <p class="hint" style="margin-top:8px">Use {name} for the guest's name and {link} for their invite link.</p>
+      <textarea id="msg" rows="9"></textarea>
+      <div class="row"><button class="btn line small" type="button" id="reset">Use the original message</button></div>
+    </details>
+    <div style="margin-top:16px">
+      <div class="progress"><span id="prog-text">No guests yet</span><button class="btn line small" type="button" id="clear-sent">Untick all</button></div>
+      <div class="bar"><i id="prog-bar"></i></div>
+      <div class="list" id="out"><p class="empty">Your guests will show here after step 2.</p></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+  var DEFAULTS = {
+    invite: "Assalamu Alaikum {name},\n\nWith the blessings of Allah, we invite you to the Dawat-e-Walima of Md. Saad & Sana.\n\nMonday, 9 November 2026, after Namaz-e-Maghrib\nAbuji Marriage Ground, Aampada Road, Avachit Pada, Bhiwandi\n\nOpen your invitation here:\n{link}\n\nDuaon mein yaad rakhiyega.",
+    r1: "Assalamu Alaikum {name},\n\nA gentle reminder: the Dawat-e-Walima of Saad & Sana is tomorrow, Monday 9 November, after Namaz-e-Maghrib.\nAbuji Marriage Ground, Avachit Pada, Bhiwandi.\n\nDirections and details:\n{link}\n\nWe look forward to seeing you, InshaAllah.",
+    r2: "Assalamu Alaikum {name},\n\nToday is the Dawat-e-Walima of Saad & Sana, after Namaz-e-Maghrib, at Abuji Marriage Ground, Avachit Pada, Bhiwandi.\n\nTap for directions:\n{link}\n\nSee you tonight, InshaAllah."
+  };
+  function $(s){ return document.querySelector(s); }
+  function load(k, d){ try { var v = localStorage.getItem("wl-" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
+  function save(k, v){ try { localStorage.setItem("wl-" + k, JSON.stringify(v)); } catch (e) {} }
+
+  var base = $("#base"), list = $("#list"), msg = $("#msg"), out = $("#out");
+  var msgs = load("msgs", {}), sent = load("sent", {}), kind = "invite", guests = [];
+  base.value = load("base", base.value);
+  list.value = load("list", "");
+
+  function toast(t){ var el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(function(){ el.classList.remove("show"); }, 1800); }
+  function template(){ return msgs[kind] || DEFAULTS[kind]; }
+  msg.value = template();
+
+  function phoneOf(raw){
+    var d = (raw || "").replace(/\D/g, "");
+    if (!d) return "";
+    if (d.length === 11 && d.charAt(0) === "0") d = d.slice(1);
+    if (d.length === 10) d = "91" + d;
+    return d.length >= 11 ? d : "";
+  }
+  function parse(text){
+    var res = [];
+    text.split(/\r?\n/).forEach(function(line){
+      line = line.trim(); if (!line) return;
+      var name = line, phone = "";
+      var parts = line.split(/\t|,|;/).map(function(p){ return p.trim(); }).filter(Boolean);
+      if (parts.length > 1) {
+        var pi = -1;
+        parts.forEach(function(p, i){ if (pi < 0 && /^\+?[\d\s\-()]{10,}$/.test(p)) pi = i; });
+        if (pi >= 0) { phone = parts[pi]; parts.splice(pi, 1); }
+        name = parts.join(", ");
+      } else {
+        var m = line.match(/(\+?\d[\d\s\-()]{8,}\d)\s*$/);
+        if (m) { phone = m[1]; name = line.slice(0, m.index).trim(); }
+      }
+      name = name.replace(/\s+/g, " ").trim();
+      if (name) res.push({ name: name, phone: phoneOf(phone) });
+    });
+    return res;
+  }
+  function pretty(d){ return d.length === 12 && d.indexOf("91") === 0 ? "+91 " + d.slice(2, 7) + " " + d.slice(7) : "+" + d; }
+  function slug(name){
+    if (/[^\x00-\x7F]/.test(name)) return encodeURIComponent(name);
+    return name.replace(/&/g, " and ").replace(/[^A-Za-z0-9 .]/g, " ").trim().replace(/\s+/g, "-");
+  }
+  function linkFor(g){
+    var b = base.value.trim() || location.href.replace(/send\.html.*$/, "");
+    b = b.replace(/[?#].*$/, "");
+    if (!/\/$/.test(b) && !/\.html$/.test(b)) b += "/";
+    return b + "?to=" + slug(g.name);
+  }
+  function textFor(g){ return template().split("{name}").join(g.name).split("{link}").join(linkFor(g)); }
+  function key(g){ return kind + "|" + g.name + "|" + g.phone; }
+  function waUrl(g){ return "https://wa.me/" + (g.phone || "") + "?text=" + encodeURIComponent(textFor(g)); }
+
+  function progress(){
+    var done = guests.filter(function(g){ return sent[key(g)]; }).length;
+    $("#prog-text").textContent = guests.length ? ("Sent " + done + " of " + guests.length) : "No guests yet";
+    $("#prog-bar").style.width = guests.length ? (100 * done / guests.length) + "%" : "0";
+  }
+  function render(){
+    out.textContent = "";
+    if (!guests.length) { var p = document.createElement("p"); p.className = "empty"; p.textContent = "Your guests will show here after step 2."; out.appendChild(p); progress(); return; }
+    guests.forEach(function(g, i){
+      var row = document.createElement("div"); row.className = "guest" + (sent[key(g)] ? " done" : "");
+      var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!sent[key(g)]; cb.id = "g" + i;
+      cb.setAttribute("aria-label", "Sent to " + g.name);
+      cb.addEventListener("change", function(){ if (cb.checked) sent[key(g)] = 1; else delete sent[key(g)]; save("sent", sent); row.classList.toggle("done", cb.checked); progress(); });
+      var nm = document.createElement("label"); nm.className = "g-name"; nm.htmlFor = cb.id; nm.textContent = g.name;
+      var meta = document.createElement("div"); meta.className = "g-meta";
+      meta.textContent = (g.phone ? pretty(g.phone) : "No number: WhatsApp will ask you to pick the contact") + "  |  link ends with ?to=" + slug(g.name);
+      var acts = document.createElement("div"); acts.className = "g-actions";
+      var wa = document.createElement("a"); wa.className = "btn small"; wa.textContent = "Send"; wa.setAttribute("aria-label", "Send on WhatsApp to " + g.name); wa.href = waUrl(g); wa.target = "_blank"; wa.rel = "noopener";
+      wa.addEventListener("click", function(){ setTimeout(function(){ if (!cb.checked) { cb.checked = true; cb.dispatchEvent(new Event("change")); } }, 600); });
+      var cp = document.createElement("button"); cp.type = "button"; cp.className = "btn line small"; cp.textContent = "Copy"; cp.setAttribute("aria-label", "Copy the message for " + g.name);
+      cp.addEventListener("click", function(){ copy(textFor(g)); });
+      var cardBtn = document.createElement("button"); cardBtn.type = "button"; cardBtn.className = "btn line small"; cardBtn.textContent = "Card"; cardBtn.setAttribute("aria-label", "Make the card with the name " + g.name);
+      cardBtn.addEventListener("click", function(){ cardWithName(g.name); });
+      acts.appendChild(wa); acts.appendChild(cp); acts.appendChild(cardBtn);
+      row.appendChild(cb); row.appendChild(nm); row.appendChild(meta); row.appendChild(acts);
+      out.appendChild(row);
+    });
+    progress();
+  }
+  function copy(t){
+    function fallback(){ var ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); toast("Copied"); } catch (e) { toast("Select and copy the text"); } ta.remove(); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ toast("Copied"); }, fallback); else fallback();
+  }
+
+  function make(){
+    guests = parse(list.value);
+    save("list", list.value);
+    var noPhone = guests.filter(function(g){ return !g.phone; }).length;
+    $("#parsed").textContent = guests.length ? (guests.length + " guests" + (noPhone ? ", " + noPhone + " without a number" : "")) : "Add at least one name";
+    render();
+  }
+  $("#make").addEventListener("click", make);
+  base.addEventListener("change", function(){ save("base", base.value.trim()); render(); });
+  Array.prototype.forEach.call(document.querySelectorAll("input[name=kind]"), function(r){
+    r.addEventListener("change", function(){ kind = r.value; msg.value = template(); render(); });
+  });
+  msg.addEventListener("input", function(){ msgs[kind] = msg.value; save("msgs", msgs); render(); });
+  $("#reset").addEventListener("click", function(){ delete msgs[kind]; save("msgs", msgs); msg.value = template(); render(); toast("Original message back"); });
+  $("#clear-sent").addEventListener("click", function(){ guests.forEach(function(g){ delete sent[key(g)]; }); save("sent", sent); render(); });
+
+  /* card image with the guest's name on a band above it */
+  var cardImg = null;
+  function getCard(){
+    return new Promise(function(res, rej){
+      if (cardImg) return res(cardImg);
+      var im = new Image(); im.onload = function(){ cardImg = im; res(im); }; im.onerror = rej; im.src = "card.jpg";
+    });
+  }
+  function cardWithName(name){
+    var fontsReady = document.fonts && document.fonts.load ? Promise.all([document.fonts.load("64px 'Great Vibes'"), document.fonts.load("600 26px Cinzel")]).catch(function(){}) : Promise.resolve();
+    Promise.all([getCard(), fontsReady]).then(function(r){
+      var im = r[0], W = im.naturalWidth, band = Math.round(W * 0.17), H = im.naturalHeight + band;
+      var cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+      var c = cv.getContext("2d");
+      var g = c.createRadialGradient(W / 2, 0, 10, W / 2, 0, W * 0.8);
+      g.addColorStop(0, "#7C101F"); g.addColorStop(.6, "#5A0710"); g.addColorStop(1, "#2A0307");
+      c.fillStyle = g; c.fillRect(0, 0, W, band);
+      c.strokeStyle = "#D9B46C"; c.lineWidth = 2; c.beginPath(); c.moveTo(W * .2, band - 14); c.lineTo(W * .8, band - 14); c.stroke();
+      c.textAlign = "center"; c.textBaseline = "alphabetic";
+      c.fillStyle = "#E8CB86"; c.font = "600 " + Math.round(W * .024) + "px Cinzel, Georgia, serif";
+      c.fillText("SPECIALLY FOR", W / 2, band * .32);
+      var size = Math.round(W * .075); c.font = size + "px 'Great Vibes', cursive";
+      while (c.measureText(name).width > W * .9 && size > 28) { size -= 4; c.font = size + "px 'Great Vibes', cursive"; }
+      c.fillStyle = "#F3D995"; c.fillText(name, W / 2, band * .78);
+      c.drawImage(im, 0, band);
+      cv.toBlob(function(blob){ if (blob) showCard(blob, name); }, "image/jpeg", 0.9);
+    }).catch(function(){ toast("The card image did not load"); });
+  }
+  function showCard(blob, name){
+    var url = URL.createObjectURL(blob), fname = "Walima-card-" + name.replace(/[^A-Za-z0-9]+/g, "-") + ".jpg";
+    var m = document.createElement("div"); m.className = "modal"; m.setAttribute("role", "dialog"); m.setAttribute("aria-label", "Card for " + name);
+    var img = document.createElement("img"); img.src = url; img.alt = "Card with the name " + name;
+    var p = document.createElement("p"); p.textContent = "On a phone, press and hold the picture to save it.";
+    var row = document.createElement("div"); row.className = "row";
+    var dl = document.createElement("a"); dl.className = "btn small"; dl.href = url; dl.download = fname; dl.textContent = "Download";
+    row.appendChild(dl);
+    try {
+      var file = new File([blob], fname, { type: "image/jpeg" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        var sh = document.createElement("button"); sh.type = "button"; sh.className = "btn small"; sh.textContent = "Share";
+        sh.addEventListener("click", function(){ navigator.share({ files: [file] }).catch(function(){}); });
+        row.appendChild(sh);
+      }
+    } catch (e) {}
+    var close = document.createElement("button"); close.type = "button"; close.className = "btn line small"; close.style.color = "#F6E8D0"; close.style.borderColor = "#F6E8D0"; close.textContent = "Close";
+    function shut(){ m.remove(); URL.revokeObjectURL(url); }
+    close.addEventListener("click", shut);
+    m.addEventListener("click", function(e){ if (e.target === m) shut(); });
+    row.appendChild(close);
+    m.appendChild(img); m.appendChild(p); m.appendChild(row);
+    document.body.appendChild(m);
+    close.focus();
+  }
+
+  if (list.value.trim()) make(); else render();
+})();
+</script>
+</body>
+</html>
