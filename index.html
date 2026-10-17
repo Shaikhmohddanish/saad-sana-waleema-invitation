@@ -106,8 +106,10 @@ h1,h2,h3{margin:0;font-weight:inherit}
 .lede{margin-top:14px;font-style:italic;color:var(--ink-soft);text-wrap:balance}
 .note{margin-top:14px;font-size:1rem;line-height:1.45;color:var(--ink-soft);text-wrap:pretty}
 .script{font-family:var(--f-script);font-weight:400;line-height:1.15}
-.name-ink{--ink:linear-gradient(180deg,var(--name-a) 0%,var(--name-b) 55%,var(--name-c) 100%);background-image:var(--ink);-webkit-background-clip:text;background-clip:text;color:transparent;padding-inline:.25em}
-.gold-ink{--ink:linear-gradient(180deg,#FBEBB8 0%,#E6C478 42%,#B98A3E 72%,#F2D893 100%);background-image:var(--ink);-webkit-background-clip:text;background-clip:text;color:transparent;padding-inline:.25em}
+/* gradient text is only painted inside its own box, and script capitals and descenders reach past the line box,
+   so the box gets extra padding that negative margins take back (the stops sit where the unpadded line was) */
+.name-ink{--ink:linear-gradient(180deg,var(--name-a) 13%,var(--name-b) 54%,var(--name-c) 87%);background-image:var(--ink);-webkit-background-clip:text;background-clip:text;color:transparent;padding:.2em .5em;margin:-.2em -.25em}
+.gold-ink{--ink:linear-gradient(180deg,#FBEBB8 13%,#E6C478 44%,#B98A3E 66%,#F2D893 87%);background-image:var(--ink);-webkit-background-clip:text;background-clip:text;color:transparent;padding:.2em .5em;margin:-.2em -.25em}
 .caps{font-family:var(--f-caps);font-weight:500;font-size:.8rem;letter-spacing:.12em;line-height:1.75;text-transform:uppercase;text-wrap:balance}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 20px;border-radius:999px;border:1.5px solid var(--btn-line);background:var(--btn);color:var(--btn-ink);font-family:var(--f-caps);font-weight:600;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
@@ -169,7 +171,7 @@ h1,h2,h3{margin:0;font-weight:inherit}
 @keyframes hint{0%,100%{opacity:.5}50%{opacity:1}}
 .env-to{position:absolute;left:16px;right:16px;top:calc(50% + 92px);text-align:center;pointer-events:none;transition:opacity .4s}
 .env-to .for{font-style:italic;font-size:1.15rem;color:#F6E8D0;opacity:.9}
-.env-to .who{display:block;font-family:var(--f-script);font-size:clamp(2.1rem,9.5vw,2.9rem);line-height:1.25;margin-top:2px;overflow-wrap:anywhere}
+.env-to .who{display:block;font-family:var(--f-script);font-size:clamp(2.1rem,9.5vw,2.9rem);line-height:1.25;margin-top:calc(2px - .2em);overflow-wrap:anywhere}
 .env-skip{position:absolute;z-index:7;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;padding:8px 18px;border-radius:999px;border:1px solid rgba(232,203,134,.6);background:rgba(42,3,7,.45);color:#F6E8D0;font-family:var(--f-caps);font-weight:600;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .sprigs{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:4}
 .sprigs .stem{fill:none;stroke:url(#spg);stroke-width:2.2;stroke-linecap:round}
@@ -216,10 +218,10 @@ h1,h2,h3{margin:0;font-weight:inherit}
 .bism{font-family:var(--f-quran);font-size:clamp(1.3rem,6vw,1.75rem);line-height:1.9;color:var(--wine)}
 .bism-en{font-size:.9rem;font-style:italic;color:var(--ink-soft);margin-top:2px;text-wrap:balance}
 .salaam{margin-top:20px;font-style:italic;font-size:1.2rem;color:var(--ink-soft)}
-.guest{display:block;font-size:clamp(2rem,9vw,2.6rem);margin-top:2px;overflow-wrap:anywhere;text-wrap:balance}
+.guest{display:block;font-size:clamp(2rem,9vw,2.6rem);margin-top:calc(2px - .2em);overflow-wrap:anywhere;text-wrap:balance}
 .arch-content .orn{margin-top:16px}
 .arch-content .caps{margin-top:18px;color:var(--ink)}
-.event-name{font-size:clamp(1.9rem,10.2vw,3rem);margin-top:4px;white-space:nowrap}
+.event-name{font-size:clamp(1.9rem,10.2vw,3rem);margin-top:calc(4px - .2em);white-space:nowrap}
 .couple{margin-top:6px;display:flex;flex-direction:column;align-items:center}
 .who-name{font-size:clamp(3rem,15vw,4rem);line-height:1.1}
 .parent{font-weight:600;font-size:1.08rem;color:var(--ink-soft);letter-spacing:.01em}
@@ -253,7 +255,7 @@ h1,h2,h3{margin:0;font-weight:inherit}
 .cd-num{display:block;font-weight:600;font-size:clamp(1.9rem,8.6vw,2.6rem);line-height:1;color:#F0D594;font-variant-numeric:lining-nums tabular-nums}
 .cd-lab{display:block;margin-top:6px;font-style:italic;font-size:.98rem;color:var(--on-velvet);opacity:.85}
 .cd-when{margin-top:20px;font-style:italic;font-size:1.12rem;opacity:.92}
-.cd-done{margin-top:22px;font-family:var(--f-script);font-size:2.2rem}
+.cd-done{margin-top:calc(22px - .2em);font-family:var(--f-script);font-size:2.2rem}
 
 /* ---------- save the date ---------- */
 .scratch{position:relative;width:min(78vw,300px);aspect-ratio:10/9;margin:26px auto 0}
@@ -513,7 +515,7 @@ h1,h2,h3{margin:0;font-weight:inherit}
       <div class="cd-cell" data-rv="zoom" style="--d:510ms"><span class="cd-num" data-u="s">00</span><span class="cd-lab">seconds</span></div>
     </div>
     <p class="cd-done script gold-ink" id="cd-done" hidden></p>
-    <p class="cd-when" data-rv style="--d:600ms">Monday, 9 November 2026, after Namaz-e-Maghrib</p>
+    <p class="cd-when" id="cd-when" data-rv style="--d:600ms">Until the Walima, InshaAllah</p>
   </section>
 
   <section class="sec paper" aria-labelledby="date-h">
@@ -981,7 +983,7 @@ window.INVITE = {"start": "2026-11-09T18:30:00+05:30", "end": "2026-11-09T22:30:
   function tick(){
     var now = Date.now(), d = start - now;
     if (d <= 0) {
-      $("#cd").hidden = true;
+      $("#cd").hidden = true; $("#cd-when").hidden = true;
       var done = $("#cd-done"); done.hidden = false;
       done.textContent = now < end ? "The Walima is happening now" : "JazakAllah Khair for celebrating with us";
       if (timer) clearInterval(timer);
