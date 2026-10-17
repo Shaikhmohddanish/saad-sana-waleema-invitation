@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Great+Vibes&display=swap">
-<noscript><style>.env{display:none !important}</style></noscript>
+<noscript><style>.env{display:none !important}.hero-card .hero-words{visibility:visible}.hero-card .hw-caps,.hero-card .hw-amp{opacity:1;transform:none}.hero-card .hw-name{clip-path:none}</style></noscript>
 <style>
 /* Layout: one centred column like the printed card. Maroon velvet bands hold the
    envelope, countdown and footer; ivory paper sections hold the words; gold lines
@@ -446,7 +446,7 @@ h1,h2,h3{margin:0;font-weight:inherit}
 </div>
 
 <header class="hero velvet" id="top">
-  <div class="hero-card" id="hero-card"><video id="hero-vid" class="hero-media" poster="card.jpg" width="720" height="1080" muted loop playsinline preload="auto" aria-label="Invitation card. Bismillah. Dawat-e-Walima in celebration of the marriage of Md. Saad, son of Matiurrehman Abulkhair, and Sana, daughter of Parvez ab Rashid. Monday 9 November 2026 after Namaz-e-Maghrib, Abuji Marriage Ground, Aampada Road, Avachit Pada, Bhiwandi 421302."><source src="hero.mp4" type="video/mp4"></video>
+  <div class="hero-card" id="hero-card"><video id="hero-vid" class="hero-media" poster="hero-poster.jpg" width="720" height="1080" muted loop playsinline preload="auto" aria-label="Invitation card. Bismillah. Dawat-e-Walima in celebration of the marriage of Md. Saad, son of Matiurrehman Abulkhair, and Sana, daughter of Parvez ab Rashid. Monday 9 November 2026 after Namaz-e-Maghrib, Abuji Marriage Ground, Aampada Road, Avachit Pada, Bhiwandi 421302."><source src="hero.mp4" type="video/mp4"></video>
     <div class="hero-words" aria-hidden="true">
       <p class="hw-caps" style="--d:300ms">You are invited to the<br>Dawat-e-Walima of</p>
       <p class="hw-name script" style="--d:700ms">Saad</p>
@@ -729,10 +729,15 @@ window.INVITE = {"start": "2026-11-09T18:30:00+05:30", "end": "2026-11-09T22:30:
   var env = $("#env"), heroImg = $("#hero-vid"), heroCard = $("#hero-card");
   var isOpen = false;
   heroImg.addEventListener("playing", function(){ heroCard.classList.add("vid-on"); });
+  // the poster is the video's first frame, so playback starts without a visible jump;
+  // when the video can't play (reduced motion, autoplay blocked, no source) the card is shown instead
+  function cardPoster(){ if (!heroCard.classList.contains("vid-on")) heroImg.poster = "card.jpg"; }
+  if (reduced || heroImg.networkState === 3) cardPoster();
+  $("source", heroImg).addEventListener("error", cardPoster);
   function playHero(){
     if (reduced || !isOpen || !heroImg.play) return;
     heroImg.muted = true;
-    var p = heroImg.play(); if (p && p.catch) p.catch(function(){});
+    var p = heroImg.play(); if (p && p.catch) p.catch(function(e){ if (e && (e.name === "NotAllowedError" || e.name === "NotSupportedError")) cardPoster(); });
   }
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function(list){
